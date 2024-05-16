@@ -42,6 +42,7 @@ import { CoursesCardListComponent } from "./courses-card-list/courses-card-list.
         AboutComponent,
         CourseComponent,
         CourseDialogComponent,
+        CoursesCardListComponent,
         LoginComponent,
         LessonComponent,
         SafeUrlPipe,
@@ -73,8 +74,7 @@ import { CoursesCardListComponent } from "./courses-card-list/courses-card-list.
         MatSelectModule,
         MatDatepickerModule,
         MatMomentDateModule,
-        ReactiveFormsModule,
-        CoursesCardListComponent
+        ReactiveFormsModule
     ]
 })
 export class AppModule {
