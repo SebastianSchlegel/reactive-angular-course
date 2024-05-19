@@ -1,5 +1,7 @@
 <h2 mat-dialog-title>{{course.description}}</h2>
 
+<loading></loading>
+
 
 <mat-dialog-content [formGroup]="form">
 
@@ -10,7 +12,7 @@
            formControlName="description">
 
   </mat-form-field>
-
+  
   <mat-form-field>
 
     <mat-select placeholder="Select category"
@@ -68,5 +70,4 @@
   </button>
 
 </mat-dialog-actions>
-
 
