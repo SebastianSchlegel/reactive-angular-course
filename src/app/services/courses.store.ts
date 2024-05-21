@@ -20,6 +20,10 @@ export class CoursesStore {
         this.loadAllCourses();
     }
 
+    saveCourse(courseId: string, changes: Partial<Course>): Observable<any> {
+        return null;
+    }
+
     loadAllCourses() {
         const loadCourses$ = this.http.get<Course[]>('/api/courses')
             .pipe(
