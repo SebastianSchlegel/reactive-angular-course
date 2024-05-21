@@ -42,8 +42,8 @@ export class HomeComponent implements OnInit {
         map(courses => courses.sort(sortCoursesBySeqNo)),
         catchError(err => {
           const message = "Could not load courses";
+          console.log(message, err);
           this.messagesService.showErrors(message);
-          console.error(message, err);
           return throwError(err);
         })
       );
