@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, throwError } from "rxjs";
+import { BehaviorSubject, Observable, pipe, throwError } from "rxjs";
 import { Course, sortCoursesBySeqNo } from "../model/course";
-import { catchError, map, tap } from "rxjs/operators";
+import { catchError, map, shareReplay, tap } from "rxjs/operators";
 import { HttpClient } from "@angular/common/http";
 import { LoadingService } from "../loading/loading.service";
 import { MessagesService } from "../messages/messages.service";
@@ -17,11 +17,33 @@ export class CoursesStore {
     courses$: Observable<Course[]> = this.subject.asObservable();
 
     constructor(private http: HttpClient, private loadingService: LoadingService, private messagesService: MessagesService) {
+        this.courses$.subscribe(
+                c => console.log(c)
+        );
         this.loadAllCourses();
     }
 
     saveCourse(courseId: string, changes: Partial<Course>): Observable<any> {
-        return null;
+        const courses = this.subject.getValue();
+        const index = courses.findIndex(course => course.id = courseId);
+        const newCourse: Course = {
+            ...courses[index],
+            ...changes
+        };
+        const newCourses: Course[] = courses.slice(0);
+        newCourses[index] = newCourse;
+        this.subject.next(newCourses);
+
+        return this.http.put(`/api/courses/${courseId}`, changes)
+        .pipe(
+            catchError(err => {
+                const message = "Could not save course";
+                console.log(message, err);
+                this.messagesService.showErrors(message);
+                return throwError(err);
+            }),
+            shareReplay()
+        );
     }
 
     loadAllCourses() {
@@ -46,7 +68,8 @@ export class CoursesStore {
             .pipe(
                 map(courses =>
                     courses.filter(course => course.category == category)
-                        .sort(sortCoursesBySeqNo))
+                        .sort(sortCoursesBySeqNo)),
+                        tap(c => console.log(category, c))
             );
     }
 
